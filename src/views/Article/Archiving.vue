@@ -53,7 +53,7 @@ import utils from "@/utils/utils";
 import Footer from "@/components/Footer";
 const activities = ref([]);
 onBeforeMount(() => {
-  api.get("article/getArticleTIme").then((res) => {
+  api.get("article/getArticleTime").then((res) => {
     if (res.data.code === 200) {
       activities.value = res.data.data;
     } else {

@@ -111,13 +111,13 @@ const config = useConfigStore(pinia);
 onBeforeMount(() => {
   api.get("user/getMessage").then((res) => {
     config.setEmail(res.data.data.email);
-    config.setPic(res.data.data.imgurl);
+    config.setPic(res.data.data.imgUrl);
     config.setGithub(res.data.data.github);
     config.setRecord(res.data.data.record);
     config.setTitle(res.data.data.title);
     config.setTitle2(res.data.data.title2);
     config.setNickname(res.data.data.name);
-    config.setBackPic(res.data.data.backList);
+    config.setBackPic(res.data.data.background);
   });
 });
 </script>

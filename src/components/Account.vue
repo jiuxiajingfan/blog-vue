@@ -40,13 +40,20 @@
       </el-collapse-item>
       <el-collapse-item name="2">
         <template #title>
-          <el-icon size="20px" style="color: #1e9fff"><Setting /></el-icon>
+          <el-icon size="20px" style="color: #1e9fff">
+            <Setting />
+          </el-icon>
           <span style="margin-left: 5px; font-size: 20px; color: #1e9fff"
             >密码修改</span
           >
         </template>
         <el-card shadow="none">
-          <el-form :model="userModel" label-width="120px">
+          <el-form
+            :model="userModel"
+            label-width="120px"
+            :rules="rules"
+            :ref="changePasswordModel"
+          >
             <el-form-item label="原密码 :" prop="pwdOriginal">
               <el-input
                 type="password"
@@ -74,9 +81,9 @@
       </el-collapse-item>
       <el-collapse-item name="3">
         <template #title>
-          <el-icon size="20px" style="color: #1e9fff"
-            ><PictureFilled
-          /></el-icon>
+          <el-icon size="20px" style="color: #1e9fff">
+            <PictureFilled />
+          </el-icon>
           <span style="margin-left: 5px; font-size: 20px; color: #1e9fff"
             >图片设置</span
           >
@@ -95,7 +102,9 @@
                     :key="item"
                     v-model="userModel.backImg[index]"
                   ></el-input>
-                  <el-icon @click="count++" size="40px"><CirclePlus /></el-icon>
+                  <el-icon @click="count++" size="40px">
+                    <CirclePlus />
+                  </el-icon>
                 </el-form-item>
                 <el-button @click="changePic" type="primary">确定</el-button>
               </el-scrollbar>
@@ -110,6 +119,7 @@
 <script setup>
 // eslint-disable-next-line no-undef
 import { reactive, ref } from "vue";
+
 const activeNames = ref(["1"]);
 import md5 from "js-md5";
 import api from "@/api/api";
@@ -119,6 +129,7 @@ import pinia from "@/store/store";
 import router from "@/router";
 import { useAuthStore } from "@/store/auth";
 import { ElNotification } from "element-plus";
+
 const config = useConfigStore(pinia);
 const userModel = reactive({
   github: config.getGithub,
@@ -126,7 +137,7 @@ const userModel = reactive({
   pwdOriginal: "",
   pwdNew: "",
   pwdNew2: "",
-  nickname: config.getnickname,
+  nickname: config.getNickname,
   record: config.getRecord,
   backImg: config.getBackImg,
   pic: config.getPic,
@@ -207,9 +218,9 @@ const changePassword = () => {
     if (valid) {
       api
         .post("/user/changePwd", {
-          pwdOriginal: md5(userModel.pwdOriginal + config.getnickname),
-          pwdNew: md5(userModel.pwdNew + config.getnickname),
-          pwdConfirm: md5(userModel.pwdNew2 + config.getnickname),
+          pwdOriginal: md5(userModel.pwdOriginal + config.getNickname),
+          pwdNew: md5(userModel.pwdNew + config.getNickname),
+          pwdConfirm: md5(userModel.pwdNew2 + config.getNickname),
         })
         .then((res) => {
           if (res.data.code === 200) {

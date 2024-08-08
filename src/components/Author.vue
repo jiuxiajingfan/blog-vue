@@ -114,12 +114,12 @@ const login = () => {
     if (valid) {
       api
         .post("user/login", {
-          name: registerFormData.name,
+          username: registerFormData.name,
           password: md5(registerFormData.password + registerFormData.name),
         })
         .then((res) => {
           if (res.data.code === 200) {
-            Auth.setToken(res.data.msg);
+            Auth.setToken(res.data.data);
             utils.showMessage(200, "登录成功，欢迎回来！");
             router.push("/admin");
           } else {
