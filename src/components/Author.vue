@@ -109,6 +109,7 @@ const loginRules = reactive({
   ],
 });
 const Auth = useAuthStore(pinia);
+const Config = useConfigStore(pinia);
 const login = () => {
   ruleFormRef.value.validate((valid) => {
     if (valid) {
@@ -120,8 +121,9 @@ const login = () => {
         .then((res) => {
           if (res.data.code === 200) {
             Auth.setToken(res.data.data);
+            Config.setUserName(registerFormData.name);
             utils.showMessage(200, "登录成功，欢迎回来！");
-            router.push("/admin");
+            router.push("/manageArticle");
           } else {
             utils.showErrMessage(res.data.msg);
           }

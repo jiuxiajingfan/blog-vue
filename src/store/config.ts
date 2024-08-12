@@ -11,6 +11,7 @@ export const useConfigStore = defineStore("Config", {
       title: "",
       title2: "",
       backImage: [],
+      userName: "",
     };
   },
   getters: {
@@ -22,6 +23,7 @@ export const useConfigStore = defineStore("Config", {
     getTitle: (state) => state.title,
     getTitle2: (state) => state.title2,
     getBackImg: (state) => state.backImage,
+    getUserName: (state) => state.userName,
   },
   actions: {
     setPic(list: string) {
@@ -47,6 +49,9 @@ export const useConfigStore = defineStore("Config", {
     },
     setNickname(list: string) {
       this.nickname = list;
+    },
+    setUserName(list: string) {
+      this.userName = list;
     },
   },
   persist: true,
