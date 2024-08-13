@@ -42,7 +42,7 @@ const submit = () => {
   api
     .post("article/addArticle", {
       title: form.title,
-      descript: form.abstract,
+      desc: form.abstract,
       label: form.label,
       body: vditor.value.getValue(),
     })

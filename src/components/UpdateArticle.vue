@@ -46,7 +46,7 @@ const submit = () => {
   api
     .post("article/updateArticle", {
       title: form.title,
-      descript: form.abstract,
+      desc: form.abstract,
       label: form.label,
       body: vditor.value.getValue(),
       id: router.currentRoute.value.query.id,
@@ -67,7 +67,7 @@ onMounted(() => {
     })
     .then((res) => {
       form.title = res.data.data.title;
-      form.abstract = res.data.data.descript;
+      form.abstract = res.data.data.desc;
       form.label = res.data.data.label;
       form.content = res.data.data.body;
       vditor.value.setValue(form.content);
