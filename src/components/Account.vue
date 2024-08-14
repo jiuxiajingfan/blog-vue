@@ -6,6 +6,7 @@
         v-for="section in sections"
         :name="section.name"
         :key="section.name"
+        :icon="section.icon"
       >
         <template #title>
           <el-icon size="20px" class="icon">
@@ -163,6 +164,8 @@ const rules = reactive({
   ],
 });
 const changePic = () => {
+  userModel.backImg = userModel.backImg.filter((item) => item !== "");
+  count.value = userModel.backImg.length;
   api
     .post("/user/changePic", { back: userModel.backImg, pic: userModel.pic })
     .then((res) => {

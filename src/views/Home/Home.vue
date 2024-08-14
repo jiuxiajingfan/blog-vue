@@ -49,7 +49,6 @@ import ArticleList from "@/components/ArticleList";
 import Author from "@/components/Author";
 import Classify from "@/components/Classify";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import { useConfigStore } from "@/store/config";
 import pinia from "@/store/store";
 import { storeToRefs } from "pinia/dist/pinia";

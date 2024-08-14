@@ -22,13 +22,23 @@
         </el-col>
         <el-col :span="4">
           <el-affix :offset="0">
-            <el-button @click="submit" style="width: 100%">打开</el-button>
-            <el-tree-v2
-              v-show="show"
+            <el-button
+              @click="submit"
+              plain
+              style="width: 100%; height: 40px"
+              class="c1"
+              >{{ tip }}</el-button
+            >
+            <el-tree
+              v-if="show"
               style="max-width: 600px"
               :data="tree"
               :props="props"
               :height="500"
+              node-key="id"
+              @node-click="junp"
+              :default-expanded-keys="defaultExpandedKeys"
+              class="c1"
             />
           </el-affix>
         </el-col>
@@ -55,55 +65,74 @@ const date = ref("");
 const date2 = ref("");
 const vv = ref();
 const tree = ref();
+const Id = ref(0);
 const props = {
-  value: "tag",
+  value: "id",
   label: "content",
   children: "children",
 };
-// 树节点结构定义
-function createTreeNode(tagName, content) {
-  return {
-    tag: tagName,
-    content: content,
-    children: [],
-  };
-}
+const tip = ref("打开大纲");
+const defaultExpandedKeys = ref([]);
 function buildTree(anchors) {
-  const root = { children: [] }; // 虚拟根节点
-  const stack = [root]; // 栈初始化为根节点
+  const tree = [];
+  const stack = [];
 
   anchors.forEach((anchor) => {
-    const level = parseInt(anchor.tagName[1]); // 获取当前标签的级别 (如 'H2' 的级别是 2)
-    const node = createTreeNode(anchor.tagName, anchor.textContent); // 创建当前节点
-
-    // 将当前节点放到正确的父节点的 children 中
-    while (stack.length > level) {
-      stack.pop(); // 如果当前层次比栈顶元素小或等于，弹出栈顶元素
+    const level = parseInt(anchor.tagName.substring(1)); // Get the level from 'h1', 'h2', etc.
+    const node = {
+      level,
+      content: anchor.textContent,
+      children: [],
+      tag: anchor,
+      id: Id.value++,
+    };
+    defaultExpandedKeys.value.push(node.id);
+    // Find the correct parent for the current node
+    while (stack.length > 0 && stack[stack.length - 1].level >= level) {
+      stack.pop();
     }
 
-    stack[stack.length - 1].children.push(node); // 将当前节点作为子节点添加
-    stack.push(node); // 当前节点入栈
+    if (stack.length === 0) {
+      // No parent, this is a root node
+      tree.push(node);
+    } else {
+      // Attach this node to the last node in the stack
+      stack[stack.length - 1].children.push(node);
+    }
+
+    // Add the current node to the stack
+    stack.push(node);
   });
 
-  return root.children; // 返回根节点的 children 作为最终树结构
+  return tree;
 }
+
+const flag = ref(true);
 const show = ref(false);
 const submit = () => {
-  var elementById = document.getElementById("V1");
-  if (elementById) {
-    const anchors = elementById.querySelectorAll("h1,h2,h3,h4,h5,h6");
-    const titles = Array.from(anchors).filter(
-      (title) => !!title.innerText.trim()
-    );
-    tree.value = buildTree(titles);
-    console.log(JSON.stringify(tree, null, 2));
+  if (!show.value) {
+    tip.value = "收起大纲";
+  } else {
+    tip.value = "打开大纲";
   }
-  show.value = true;
+  if (flag.value && !show.value) {
+    var elementById = document.getElementById("V1");
+    if (elementById) {
+      const anchors = elementById.querySelectorAll("h1,h2,h3,h4,h5,h6");
+      const titles = Array.from(anchors).filter(
+        (title) => !!title.innerText.trim()
+      );
+      tree.value = buildTree(titles);
+    }
+  }
+  show.value = !show.value;
+  flag.value = false;
+  console.log(tree.value);
 };
-const junp = (id) => {
-  const element = document.getElementById(id);
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" });
+const junp = (p1, p2, p3, p4) => {
+  console.log(p1.tag);
+  if (p1.tag) {
+    p1.tag.scrollIntoView({ behavior: "smooth" });
   }
 };
 onBeforeMount(() => {
@@ -136,11 +165,13 @@ onBeforeMount(() => {
 
 <style lang="scss" scoped>
 .cardCss2 {
-  border-radius: 10px;
   text-align: left;
   background-color: rgba(255, 255, 255, 0.7);
 }
-
+.c1 {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
 .html_output {
   text-align: left;
 }

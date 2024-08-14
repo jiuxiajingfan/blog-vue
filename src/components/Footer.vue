@@ -32,7 +32,7 @@ const { record } = storeToRefs(config);
 const guest = ref(0);
 onBeforeMount(() => {
   api.get("record/getGuest").then((res) => {
-    guest.value = res.data.msg;
+    guest.value = res.data.data;
   });
 });
 </script>

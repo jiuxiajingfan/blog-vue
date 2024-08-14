@@ -36,6 +36,12 @@
               <span>文章管理</span>
             </template>
           </el-menu-item>
+          <el-menu-item index="/">
+            <template #title>
+              <el-icon><location /></el-icon>
+              <span>退出后台</span>
+            </template>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
     </el-aside>
@@ -51,10 +57,7 @@ import pinia from "@/store/store";
 import api from "@/api/api";
 import utils from "@/utils/utils";
 import { useConfigStore } from "@/store/config";
-const cnt = ref(0);
-const menuData = ref([]);
 const map = new Map();
-const menuData2 = [];
 const openeds = [0];
 const isCollapse = ref(false);
 const buttonWidth = ref("200px");
@@ -66,47 +69,8 @@ const contraction = () => {
     buttonWidth.value = "200px";
   }
 };
-const editableTabs = ref([
-  {
-    title: "系统信息",
-    name: "SystemStatus",
-    content: "SystemStatus",
-  },
-]);
-const focus = ref("SystemStatus");
 const mapTab = new Map();
 mapTab.set("SystemStatus", "SystemStatus");
-const addTab = (targetName, component, title) => {
-  if (mapTab.get(component) !== component) {
-    cnt.value = cnt.value + 1;
-    editableTabs.value.push({
-      title: title,
-      name: component,
-      content: component,
-    });
-    mapTab.set(component, component);
-    focus.value = component;
-  } else {
-    focus.value = component;
-  }
-};
-const removeTab = (targetName) => {
-  const tabs = editableTabs.value;
-  let activeName = focus.value;
-  if (activeName === targetName) {
-    tabs.forEach((tab, index) => {
-      if (tab.name === targetName) {
-        const nextTab = tabs[index + 1] || tabs[index - 1];
-        if (nextTab) {
-          activeName = nextTab.name;
-        }
-      }
-    });
-  }
-  mapTab.delete(targetName);
-  focus.value = activeName;
-  editableTabs.value = tabs.filter((tab) => tab.name !== targetName);
-};
 const config = useConfigStore(pinia);
 onBeforeMount(() => {
   api.get("user/getMessage").then((res) => {
