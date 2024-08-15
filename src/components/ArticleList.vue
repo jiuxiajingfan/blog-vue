@@ -8,7 +8,7 @@
               <div class="card-header">
                 <h2 style="text-align: center">{{ item.title }}</h2>
                 <div style="text-align: left">
-                  {{ item.descript }}
+                  {{ item.desc }}
                 </div>
               </div>
             </template>
