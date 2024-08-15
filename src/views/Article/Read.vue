@@ -151,9 +151,9 @@ onBeforeMount(() => {
       VditorPreview.preview(document.getElementById("V1"), body.value, {
         mode: "dark",
         speech: {
-          enable: true,
+          enable: false,
         },
-        anchor: 2,
+        anchor: 0,
         hljs: {
           lineNumber: true,
           style: "dracula",
